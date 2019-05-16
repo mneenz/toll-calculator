@@ -22,10 +22,12 @@ Your job is to deliver the code and from now on, you are the responsible go-to-p
 ## Instructions
 You can make any modifications or suggestions for modifications that you see fit. Fork this repository and deliver your results via a pull-request or send us an e-mail. You could also create a gist, for privacy reasons, and send us the link.
 
-
-##Initial setup
+## Initial setup
 `cd` into the theme directory
 Run `npm install` to install the front end requirements, and then run gulp. `gulp` will output all the CSS & JS files into the `assets/dist` folder.
 
 ## Git
 Please use staging and master branches accordingly. For all new changes, branch off of `master` and create your own feature branch for example `my-change`. Merge your feature branch into staging to test, and only when it is working, merge into master.
+
+##Car animation
+This animation is taken from: file:///C:/Users/Nina/Documents/Arbeten/Web/Evolve/index.html
