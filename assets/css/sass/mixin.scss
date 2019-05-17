@@ -9,24 +9,25 @@
   transition: $args;
 }
 
-/*Car & Scooter moving animation*/
-@-moz-keyframes vehicleMoving {
-	0%   {left:-25%;}
-	100% {left:100%;}
+@-webkit-keyframes moveUp {
+  0% { }
+  100% { -webkit-transform: translateY(0); opacity: 1;}
 }
 
-@-webkit-keyframes vehicleMoving{
-	0%   {left:-25%;}
-	100% {left:100%;}
+@keyframes moveUp {
+  0% { }
+  100% { -webkit-transform: translateY(0); transform: translateY(0); opacity: 1; }
 }
 
-@-moz-keyframes tyre-rotate {
-  from{-moz-transform:rotate(-360deg);}
-  to{-moz-transform:rotate(0deg);}
-}
-@-webkit-keyframes tyre-rotate {
-  from{-webkit-transform:rotate(-360deg);}
-  to{-webkit-transform:rotate(0deg);}
+/*Moving up fade in animation*/
+.moveUp {
+  opacity:0;
+  -webkit-transform: translateY(200px); /*Taken from mixin.scss*/
+  transform: translateY(200px) ; /*Taken from mixin.scss*/
+  -moz-transform: translateY(200px); /*Taken from mixin.scss*/
+  -moz-animation:  moveUp 1s ease forwards; /*Taken from mixin.scss*/
+  -webkit-animation: moveUp 1s ease forwards; /*Taken from mixin.scss*/
+  animation: moveUp 1s ease forwards; /*Taken from mixin.scss*/
 }
 
 /*Buttons*/

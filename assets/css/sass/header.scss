@@ -1,13 +1,51 @@
 /*! HEADER STYLES */
 
 #header {
-  margin: 0;
+  margin: -2% -1% 0 -1%;
+  width: 102%;
+  height: 100px;
   overflow: hidden;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
   background: white;
-  text-align: center;
-  padding: 2%;
-  box-sizing: border-box;
-  height: auto;
-  position: relative;
+
+  /*Breakpoint for when menu can't fit the screen anymore*/
+  @media screen and (max-width: 1190px) {
+    padding: 2%;
+    box-sizing: border-box;
+    height: auto;
+    position: relative;
+  }
+
+  #branding {
+    padding: 1%;
+    box-sizing: border-box;
+    height: 100%;
+    display:inline-block;
+    vertical-align: middle;
+
+    /*Breakpoint for when menu can't fit the screen anymore*/
+    @media screen and (max-width: 1190px) {
+      height:auto;
+      width: 20%;
+      max-width: 90px;
+
+      img {
+        height: auto !important;
+        width: 100% !important;
+      }
+    }
+
+    /*#bradning img*/
+    img {
+      height: 100%;
+      width: auto;
+      display: block;
+    }
+  }
+
+  /*#header h1*/
+  h1 {
+    vertical-align: middle;
+    display:inline-block;
+  }
 } /*Close #header*/

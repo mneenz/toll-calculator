@@ -9,11 +9,9 @@ Version: 1.0
 @import "background.scss"; /*Nature Background SASS file*/
 @import "header.scss"; /*Header SASS file*/
 @import "car.scss"; /*Car SASS file*/
-@import "scooter.scss"; /*Scooter SASS file*/
 
 body,html{
   height: 100%;
-  margin: 0;
 }
 
 body {
@@ -21,6 +19,7 @@ body {
   overflow-x: hidden;
   display: block;
   clear: both;
+  padding: 1%;
   box-sizing: border-box;
 	font-family:$primary-font;
 	font-size:13pt;
@@ -59,7 +58,12 @@ body {
 }
 
 #content {
+  width: 80%;
   margin: 0 auto;
+
+  @media (max-width : 870px) {
+    width: 100%;
+  }
 }
 
 /*------FOOTER-----*/
