@@ -23,11 +23,13 @@ Your job is to deliver the code and from now on, you are the responsible go-to-p
 You can make any modifications or suggestions for modifications that you see fit. Fork this repository and deliver your results via a pull-request or send us an e-mail. You could also create a gist, for privacy reasons, and send us the link.
 
 ## Initial setup
-`cd` into the theme directory
+`cd` into the project directory (where the gulp file is).
 Run `npm install` to install the front end requirements, and then run gulp. `gulp` will output all the CSS & JS files into the `assets/dist` folder.
 
 ## Git
-Please use staging and master branches accordingly. For all new changes, branch off of `master` and create your own feature branch for example `my-change`. Merge your feature branch into staging to test, and only when it is working, merge into master.
+Please use branches accordingly. For all new changes, branch off of `master` and create your own feature branch for example `my-change`. Test your branch changes, and only when it is working, merge the branch into master.
 
-##Car animation
-This animation is taken from: file:///C:/Users/Nina/Documents/Arbeten/Web/Evolve/index.html
+##I've taken help from these resources
+The car animation & background graphics are taken from: https://codepen.io/maheshambure21/pen/NPJvqq
+The scooter image is taken from: https://www.pngrepo.com/svg/20291/scooter
+Everything else I've built myself
