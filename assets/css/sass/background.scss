@@ -11,27 +11,49 @@
   	position:absolute;
   	bottom:0;
   	box-shadow:0 1px 16px rgba(111, 35, 51, 0.4) inset;
+    &:after {
+    	content:'';
+    	display:block;
+    	position:absolute;
+    	width:100%;
+    	height:10px;
+    	background:$street-shadow;
+    	bottom:0;
+    	border-bottom:3px solid $brown;
+    	z-index:1;
+    }
+    &:before {
+    	content:'';
+    	display:block;
+    	position:absolute;
+    	width:100%;
+    	height:7px;
+    	background:$light-brown;
+    	bottom:-7px;
+    	z-index:1;
+    }
   }
-  .street:after {
-  	content:'';
-  	display:block;
-  	position:absolute;
-  	width:100%;
-  	height:10px;
-  	background:$street-shadow;
-  	bottom:0;
-  	border-bottom:3px solid $brown;
-  	z-index:1;
-  }
-  .street:before {
-  	content:'';
-  	display:block;
-  	position:absolute;
-  	width:100%;
-  	height:7px;
-  	background:$light-brown;
-  	bottom:-7px;
-  	z-index:1;
+
+  .toll-fee {
+    position: fixed;
+    z-index: 1;
+    background: $grey;
+    height: 84px;
+    width: 20px;
+    left: 320px;
+    bottom: -4px;
+
+     p {
+      transform: rotate(90deg);
+      width: 72px;
+      margin: 0;
+      top: 29px;
+      position: absolute;
+      left: -26px;
+      right: 0;
+      color: white;
+      font-weight: bold;
+    }
   }
 
   .street-stripe {
