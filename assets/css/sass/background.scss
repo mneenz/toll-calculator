@@ -1,3 +1,4 @@
+//Background graphics
 .country-wrap {
 	position:relative;
 	width:100%;
@@ -11,6 +12,8 @@
   	position:absolute;
   	bottom:0;
   	box-shadow:0 1px 16px rgba(111, 35, 51, 0.4) inset;
+		left: 0;
+
     &:after {
     	content:'';
     	display:block;
@@ -22,6 +25,7 @@
     	border-bottom:3px solid $brown;
     	z-index:1;
     }
+
     &:before {
     	content:'';
     	display:block;
@@ -35,25 +39,25 @@
   }
 
   .toll-fee {
-    position: fixed;
+    position: absolute;
     z-index: 1;
     background: $grey;
     height: 84px;
     width: 20px;
-    left: 320px;
+    left: 185px;
     bottom: -4px;
 
-     p {
-      transform: rotate(90deg);
-      width: 72px;
-      margin: 0;
-      top: 29px;
-      position: absolute;
-      left: -26px;
-      right: 0;
-      color: white;
-      font-weight: bold;
-    }
+		p {
+			transform: rotate(90deg);
+			width: 72px;
+			margin: 0;
+			top: 29px;
+			position: absolute;
+			left: -26px;
+			right: 0;
+			color: white;
+			font-weight: bold;
+		}
   }
 
   .street-stripe {
@@ -72,28 +76,31 @@
   	background-color: $light-brown;
   	position:absolute;
   	bottom:60px;
-  }
+		left: 0;
 
-  .grass:before {
-      position: absolute;
-      content: '';
-  	   top: 14px;
-      left: 0;
-      height: 8px;
-      width: 100%;
-    	background-color: $light-brown;
-  }
-  .grass:after {
-    position: absolute;
-    content: '';
-    top: -4px;
-    left: 0;
-    width: 100%;
-    height: 8px;
-    background-color: $turquoise;
-    background: linear-gradient(135deg, transparent 25%, $turquoise 25%);
-    background-size:10px 10px;
-  }
+	  &:before {
+			position: absolute;
+			content: '';
+			top: 14px;
+			left: 0;
+			height: 8px;
+			width: 100%;
+			background-color: $light-brown;
+	  }
+
+	  &:after {
+	    position: absolute;
+	    content: '';
+	    top: -4px;
+	    left: 0;
+	    width: 100%;
+	    height: 8px;
+	    background-color: $turquoise;
+	    background: linear-gradient(135deg, transparent 25%, $turquoise 25%);
+	    background-size:10px 10px;
+	  }
+	}
+
   .sun {
   	background:$orange;
   	width:40px;
@@ -104,112 +111,5 @@
   	left:49%;
   	bottom:350px;
   }
-  .tree-1 {
-  	position:absolute;
-  	z-index:2;
-  	bottom:210px;
-  	right:10px;
-  	width:50px;
-  	height:100px;
-  }
-  .trunk {
-  	width:20%;
-  	height:30%;
-  	background:brown;
-  }
-  .branch {
-  	position:abslute;
-  	width:60%;
-  	height:30%;
-  	background:green;
-  	-moz-transform:rotate(45deg);
-  	border-radius:0 0 100% 0;
-  }
-  .branch-1 {
-  	border:50px solid;
-  	border-bottom:90px solid;
-  	border-color:transparent transparent $light-yellow transparent;
-  	height: 0;
-  	width: 0;
-  	position:absolute;
-  	left:-50px;
-  	top:-70px;
-  }
-  .branch-2 {
-  	border-bottom: 40px solid #9d8346;
-  	border-left: 30px solid transparent;
-  	border-right: 30px solid transparent;
-  	height: 0;
-  	width: 100px;
-  	position:absolute;
-  	top:60px;
-  	left:-80px;
-  }
-  .branch-3 {
-  	border-bottom: 50px solid #90713b;
-  	border-left: 40px solid transparent;
-  	border-right: 40px solid transparent;
-  	height: 0;
-  	width: 100px;
-  	position:absolute;
-  	top:100px;
-  	left:-90px;
-  }
-  .mountain-1 {
-  	background:#cea392;
-  	width:500px;
-  	height:500px;
-  	position:absolute;
-  	-moz-transform:rotate(45deg);
-  	-webkit-transform:rotate(45deg);
-  	bottom:-150px;
-  	border-radius:40px;
-  }
-  .mountain-2 {
-  	background:#e4dbd2;
-  	width:800px;
-  	height:800px;
-  	position:absolute;
-  	-moz-transform:rotate(45deg);
-  	-webkit-transform:rotate(45deg);
-  	bottom:-350px;
-  	border-radius:40px;
-  	left:250px;
-  	z-index:-1;
-  	box-shadow: 0 0 25px #e4dbd2;
-  	opacity:0.6;
-  }
-  .la {
-    position: absolute;
-    bottom: 200px;
-    width: 2px;
-    height: 50px;
-    margin-right: 20px;
-  }
 
-  .la:before {
-    top: 5px;
-    left: -10px;
-    width: 22px;
-    height: 2px;
-  }
-
-  .la:after {
-    bottom: 0;
-    left: -2px;
-    width: 6px;
-    height: 12px;
-  }
-
-  .l {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 10px #fff, 0 0 25px #fff, 0 0 50px #fff;
-  }
-
-  .l:nth-child(1) { left: -10px; }
-  .l:nth-child(2) { right: -10px; }
 }
