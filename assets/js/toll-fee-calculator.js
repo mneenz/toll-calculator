@@ -1,19 +1,19 @@
 // Toll fee calculator JS
 $(function() {
   var timeFee = 0; //Our fee based on time variable needs to be defined here in order for it to be used outside of the time function
+  var dt = new Date(); //Get the current date
 
   //This calculates the fees based on time of day
   function time() {
-    var dt = new Date(); //Get the current date
     var hour = dt.getHours(); //Get the current hour
     var minute = dt.getMinutes(); //Get current minutes
     var day = dt.getDay();
-    t = setTimeout(time,60000); //Set the interval to 6000 so that we check the time every minute
+    t = setTimeout(time,1000); //Set the interval to 6000 so that we check the time every minute
 
     /*This was taken from 'TollCalculator.java'
     * & checks what time it is based on the hours/minutes above
     * & assignes a timeFee variable based on the time of the day*/
-    if (!(day == 6 || day == 7)) //Check if its a weekend
+    if (!(day == 6 || day == 7)) //Check if it's a weekend
       if (hour == 6 && minute >= 0 && minute <= 29) timeFee = 8;
         else if (hour == 6 && minute >= 30 && minute <= 59) timeFee = 13;
         else if (hour == 7 && minute >= 0 && minute <= 59) timeFee = 18;
@@ -28,15 +28,21 @@ $(function() {
 
   time(); //Run time function
 
+  var o = 0;
   //The text appearing in our info bubble
   function showInfoBubble(){
     $('.car .info-bubble').css('opacity','1'); //Show the bubble
-    if (fee == 0){
-      $('.car .info-bubble').html("<p>I'm riding freeeeee</p>");
-    } else if (fee == 60) {
-      $('.car .info-bubble').html("<p>Maximum fee reached, I'll drive as much as I want today</p>");
+
+    if ((o > 0) && (checkHour() == false)) { //If the function has runt more than once and there has been less than an hour
+      $('.car .info-bubble').html("<p>Hey, don't bug me, it hasn't been an hour yet so I can still ride on this fee.</p>");
     } else {
-      $('.car .info-bubble').html("<p>In Sweden we say 'Cashen dom tas'.<br>I'm paying this much cashish: "+fee+" SEK</p>");
+      if (fee == 0) {
+        $('.car .info-bubble').html("<p>I'm riding freeeeee</p>");
+      } else if (fee == 60) {
+        $('.car .info-bubble').html("<p>Maximum fee reached, I'll drive as much as I want today</p>");
+      } else {
+        $('.car .info-bubble').html("<p>In Sweden we say 'Cashen dom tas'.<br>I'm paying this much cashish: "+fee+" SEK</p>");
+      }
     }
     $('.car .info-bubble').delay(3500)
     .queue(function (next) {
@@ -72,20 +78,41 @@ $(function() {
          return true; //Yaaay we can count the fee and display the info bubble
        }
      }
-   }
+  }
+
+
+  //Hour checking
+  var originalDateTime = dt.getTime(); //Get the current time
+
+  function checkHour() { //Check if 1 hour has pasts
+    var past = new Date(originalDateTime).getTime(); //Get time and compare with original time
+    var oneHour = 1000 * 60 * 60;
+    if (new Date().getTime() - past < oneHour){ //Check if the current time minus the past time is smaller than one hour
+      return false;
+    } else { //It's been one hour
+      return true;
+    }
+  }
 
   //Let's assign the fee
   var fee = 0; //It's always free to start driving!
+   //We need this to check how many times the function && tollFeePass check has run has run
   setInterval(function() { //Check if the car has passed the "toll fee mark" based on the cars position
     if (tollFeePass(true)) {
-      var nextFee = fee + timeFee; // Check what the next fee is going to be
-      if (nextFee < 60) { //If the cars position is on the toll fee mark & the fee is less than 60
-        fee += timeFee; //Add fee
-        showInfoBubble(); //Show the info bubble
-      } else if (nextFee > 60) { //If the cars position is on the toll fee mark & the fee is higher than 60
-        fee = 60; //60 is the highest fee
-        showInfoBubble(); //Show the info bubble
-      }
+      if (o == 0 || (o > 0 && checkHour(true))) { //If the function has never run before OR there has been an hour since it ran last time, add fee
+        if (o > 0 && checkHour(true)) {o = -1}; //Set this to -1 since we want to start over and there will be o++ added at the bottom.
+        var nextFee = fee + timeFee; // Check what the next fee is going to be
+        if (nextFee < 60) { //If the cars position is on the toll fee mark & the fee is less than 60
+          fee += timeFee; //Add fee
+          showInfoBubble(); //Show the info bubble
+        } else if (nextFee > 60) { //If the cars position is on the toll fee mark & the fee is higher than 60
+          fee = 60; //60 is the highest fee
+          showInfoBubble(); //Show the info bubble
+        }
+      } else if (o > 0) && (checkHour() == false) { //If the function has run before and there hasn't been an hour
+        showInfoBubble();
+
+      } o++; //Add 1 to tollFeePass check
     }
   }, 100);
 });
