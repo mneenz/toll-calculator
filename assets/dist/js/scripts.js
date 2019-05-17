@@ -1,122 +1,84 @@
-/* Toggle between adding and removing the "responsive" class to the menu when the user clicks on the icon */
-function menuFunction() {
-  var menu = document.getElementById("menu"); //Set the variable 'menu' to the #menu element
-  var header = document.getElementById("header"); //Set the variable 'header' to the #menu element
-  if (menu.className === "menu" && header.className === "header" )  { //if the 'menu' class is 'menu' and 'header' class is 'header' (we want to change them simultaneously)
-    menu.className += " responsive"; //Change the class to 'responsive'
-    header.className += " responsive";
-  } else {
-    menu.className = "menu"; //Change the class to 'menu'
-    header.className = "header";  //Change the class to 'header'
-  }
-}//Close menuFunction
 
-
-//Search function
-function searchFunction() {
-  var input, filter, ul, li, a, i; //create variable
-  input = document.getElementById("searchInput"); //input variable = #searchInput
-  filter = input.value.toUpperCase(); //filter variable = turn #input value into uppercase
-  contentSection = document.getElementById("content"); // variable contentSection = #content
-  article = contentSection.getElementsByTagName("article"); // variable article = #content article
-  for (i = 0; i < article.length; i++) { //For loop the article variable (go through the index of the elements in the array)
-    h2 = article[i].getElementsByTagName("h2")[0]; //h2 = the relevant 'i' with the h2 tag
-    if (h2.innerHTML.toUpperCase().indexOf(filter) > -1) { //if the h2 tag (in uppercase) has an index (has the search term). -1 means that it doesn't
-      article[i].classList.add('show'); //Display the relevant article
-      article[i].classList.remove('hide'); //Hide the relevant article
-      article[i].classList.remove('moveUp'); //Hide the relevant article
-    } else {
-      article[i].classList.add('hide'); //Display the relevant article
-      article[i].classList.remove('show'); //Hide the relevant article
-      article[i].classList.remove('moveUp'); //Hide the relevant article
-    }
-  }//Close for loop
-
-  //No more results text
-  var shown = document.getElementById("content").querySelectorAll(".show"); //Set the variable 'shown' to the .show articles within 'content'
-  var noResults = document.getElementById("no-results"); //Set the variable noResults to #no-results
-
-  if (shown.length == 0 ) { //If there are 0 shown articles
-    noResults.style.display = "block"; //Show the no results text
-  } else {
-    noResults.style.display = "none"; //Hide the no results text
-  }
-}//Close searchFunction
-
-//REQUEST JS
-
-var articlesRequest = new XMLHttpRequest(); //Create articlesRequestRequest object
-var articlesUrl = "https://s3.eu-west-2.amazonaws.com/enfo-test-resources/api/articles.json?action=query&format=json&orderby=key&origin=*"; //Get JSON articles
-
-articlesRequest.onreadystatechange = function() { //Function that executes on status change for the "xhttp" object
-  if (this.readyState == 4 && this.status == 200) { //If readyState is 4 (DONE) & status property is 200 (OK) https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-    var articlesArray = JSON.parse(this.responseText); // make articlesArray equal to responseText (text received from server response)
-    articlesFunction(articlesArray.articles); //Calling function with articlesArray.articles as the argument
-  }
-};
-
-articlesRequest.open("GET", articlesUrl, true); //Initialize the request at the same time as the response is the received from ".send" (asynchronously)
-articlesRequest.send(); //Send xhttp request
-
-function articlesFunction(arr) { //Create articlesFunction
-
-  //Sort the articles based on the 'publishedAt' field
-  function compare(a,b) {
-    if (a.publishedAt < b.publishedAt)
-      return -1;
-    if (a.publishedAt > b.publishedAt)
-      return 1;
-    return 0;
-  }
-
-  arr.sort(compare); //Run sort method on compare function
-
-  // var myObj = JSON.parse('{"date_created":"20171025T08:12:07Z"}'),
-  //     myDate = new Date(1000*myObj.date_created);
-  //
-  // console.log(myDate.toString());
-  // console.log(myDate.toLocaleString());
-  // console.log(myDate.toUTCString());
-    var noResults = '<div id="no-results"><h1>No Search Results</h1><p>Try another search</p></div>'; //Define the noResults variable so that we have something to show when there are no search results defined
-    var res = []; //Create array and set to variable res
-    var out = ""; //Create out variable and set to string
-    var i; //Create i variable
-    for(i = 0; i < arr.length; i++) { //For loop the array object (go through the index of the elements in the array)
-
-      //Reformat the date value
-      var publishedDate = arr[i].publishedAt; //Get the date value for the relevant object
-      var hyphenDate = publishedDate.replace(/(\d{4})(\d{2})(\d+)/, '$1-$2-$3'); //Add hyphens to string so that it looks more like the JavaScript Date format
-      var shortenedDate = hyphenDate.substring(0, 10); //Shorten string to 10 chracters so that it looks more like the JavaScript Date format
-      var dateString = new Date(shortenedDate).toUTCString(); //Create the variable dateString and set it to the date
-      var dateString = dateString.split(' ').slice(0, 4).join(' '); //Remove the time from the date
-
-      /*Fix the missing value in the author key*/
-      if (arr[i].author == null) { //If the author value is equal to null
-        var author = "Bamse"; //Bamse wrote this article :) :) (set variable author to Bamse)
-      } else {
-        var author = arr[i].author; //Set variable author to the author value
-      }
-
-
-      out += '<article id="article" class="moveUp article-'+ i +'">' +
-        '<a href="'+ arr[i].url +'" title="' + arr[i].title + '" class="img-link"><img src="' + arr[i].urlToImage + '" alt="' + arr[i].title + '" width="100%" height="auto"></a>' +
-        '<div class="info">' +
-          '<p class="date-author">Published ' + dateString + ' by ' + author + '</p>' +
-          '<h2><a href="'+ arr[i].url +'" title="' + arr[i].title + '">' + arr[i].title + '</a></h2>' +
-          '<p class="description"><a href="'+ arr[i].url +'" title="' + arr[i].title + '">' + arr[i].description + '</a></p>' +
-          '<p><a href="'+ arr[i].url +'" title="' + arr[i].title + '" class="btn"> Read More</a></p>' +
-        '</div>' +
-      '</article>';
-  }
-
- //Fill the #content tag with the content within the variables 'noResults' & 'out' & weatherWidget
-  document.getElementById("content").innerHTML = noResults + out;
-}
 
 // Toll fee calculator JS
+$(function() {
+  var timeFee = 0; //Our fee based on time variable needs to be defined here in order for it to be used outside of the time function
 
-var x = $('.car').position().left;
-var fee = 0;
-if(x > 250) {
-  fee += 18;
-}
+  //This calculates the fees based on time of day
+  function time() {
+    var dt = new Date(); //Get the current date
+    var hour = dt.getHours(); //Get the current hour
+    var minute = dt.getMinutes(); //Get current minutes
+    t = setTimeout(time,60000); //Set the interval to 6000 so that we check the time every minute
+
+    /*This was taken from 'TollCalculator.java'
+    * & checks what time it is based on the hours/minutes above
+    * & assignes a timeFee variable based on the time of the day*/
+    if (hour == 6 && minute >= 0 && minute <= 29) timeFee = 8;
+      else if (hour == 6 && minute >= 30 && minute <= 59) timeFee = 13;
+      else if (hour == 7 && minute >= 0 && minute <= 59) timeFee = 18;
+      else if (hour == 8 && minute >= 0 && minute <= 29) timeFee = 13;
+      else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) timeFee = 8;
+      else if (hour == 15 && minute >= 0 && minute <= 29) timeFee = 13;
+      else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) timeFee = 18;
+      else if (hour == 17 && minute >= 0 && minute <= 59) timeFee = 13;
+      else if (hour == 18 && minute >= 0 && minute <= 29) timeFee = 8;
+      else timeFee = 0;
+  }
+
+  time(); //Run time function
+
+  //The text appearing in our info bubble
+  function showInfoBubble(){
+    $('.info-bubble').css('opacity','1'); //Show the bubble
+    if (fee == 0){
+      $('.info-bubble').html("<p>You're riding free my friend</p>");
+    } else if (fee == 60) {
+      $('.info-bubble').html('<p>Maximum fee reached, drive as much as you want today</p>');
+    } else {
+      $('.info-bubble').html("<p>In Sweden we say 'Cashen dom tas'.<br>Your'e paying this much cashish: "+fee+"</p>");
+    }
+    $('.info-bubble').delay(4000)
+    .queue(function (next) {
+      $(this).css('opacity','0');
+      next();
+    });
+  }
+
+
+
+  function collision($div1, $div2) {
+    $div1 = $('.car');
+    $div2 = $('.toll-fee');
+    var x1 = $div1.offset().left;
+    var y1 = $div1.offset().top;
+    var h1 = $div1.outerHeight(true);
+    var w1 = $div1.outerWidth(true);
+    var b1 = y1 + h1;
+    var r1 = x1 + w1;
+    var x2 = $div2.offset().left;
+    var y2 = $div2.offset().top;
+    var h2 = $div2.outerHeight(true);
+    var w2 = $div2.outerWidth(true);
+    var b2 = y2 + h2;
+    var r2 = x2 + w2;
+
+    if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+    return true;
+   }
+
+  //Let's assign the fee
+  var fee = 0; //It's always free to start driving!
+  setInterval(function() { //Check if the car has passed the "toll fee mark" based on the cars position
+    if (collision(true)) {
+      var nextFee = fee + timeFee; // Check what the next fee is going to be
+      if (nextFee < 60) { //If the cars position is on the toll fee mark & the fee is less than 60
+        fee += timeFee; //Add fee
+        showInfoBubble(); //Show the info bubble
+      } else if (nextFee > 60) { //If the cars position is on the toll fee mark & the fee is higher than 60
+        fee = 60; //60 is the highest fee
+        showInfoBubble(); //Show the info bubble
+      }
+    }
+  }, 100);
+});
