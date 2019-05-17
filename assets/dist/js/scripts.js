@@ -1,5 +1,3 @@
-
-
 // Toll fee calculator JS
 $(function() {
   var timeFee = 0; //Our fee based on time variable needs to be defined here in order for it to be used outside of the time function
@@ -9,68 +7,77 @@ $(function() {
     var dt = new Date(); //Get the current date
     var hour = dt.getHours(); //Get the current hour
     var minute = dt.getMinutes(); //Get current minutes
+    var day = dt.getDay();
     t = setTimeout(time,60000); //Set the interval to 6000 so that we check the time every minute
 
     /*This was taken from 'TollCalculator.java'
     * & checks what time it is based on the hours/minutes above
     * & assignes a timeFee variable based on the time of the day*/
-    if (hour == 6 && minute >= 0 && minute <= 29) timeFee = 8;
-      else if (hour == 6 && minute >= 30 && minute <= 59) timeFee = 13;
-      else if (hour == 7 && minute >= 0 && minute <= 59) timeFee = 18;
-      else if (hour == 8 && minute >= 0 && minute <= 29) timeFee = 13;
-      else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) timeFee = 8;
-      else if (hour == 15 && minute >= 0 && minute <= 29) timeFee = 13;
-      else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) timeFee = 18;
-      else if (hour == 17 && minute >= 0 && minute <= 59) timeFee = 13;
-      else if (hour == 18 && minute >= 0 && minute <= 29) timeFee = 8;
-      else timeFee = 0;
+    if (!(day == 6 || day == 7)) //Check if its a weekend
+      if (hour == 6 && minute >= 0 && minute <= 29) timeFee = 8;
+        else if (hour == 6 && minute >= 30 && minute <= 59) timeFee = 13;
+        else if (hour == 7 && minute >= 0 && minute <= 59) timeFee = 18;
+        else if (hour == 8 && minute >= 0 && minute <= 29) timeFee = 13;
+        else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) timeFee = 8;
+        else if (hour == 15 && minute >= 0 && minute <= 29) timeFee = 13;
+        else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) timeFee = 18;
+        else if (hour == 17 && minute >= 0 && minute <= 59) timeFee = 13;
+        else if (hour == 18 && minute >= 0 && minute <= 29) timeFee = 8;
+        else timeFee = 0;
   }
 
   time(); //Run time function
 
   //The text appearing in our info bubble
   function showInfoBubble(){
-    $('.info-bubble').css('opacity','1'); //Show the bubble
+    $('.car .info-bubble').css('opacity','1'); //Show the bubble
     if (fee == 0){
-      $('.info-bubble').html("<p>You're riding free my friend</p>");
+      $('.car .info-bubble').html("<p>I'm riding freeeeee</p>");
     } else if (fee == 60) {
-      $('.info-bubble').html('<p>Maximum fee reached, drive as much as you want today</p>');
+      $('.car .info-bubble').html("<p>Maximum fee reached, I'll drive as much as I want today</p>");
     } else {
-      $('.info-bubble').html("<p>In Sweden we say 'Cashen dom tas'.<br>Your'e paying this much cashish: "+fee+"</p>");
+      $('.car .info-bubble').html("<p>In Sweden we say 'Cashen dom tas'.<br>I'm paying this much cashish: "+fee+" SEK</p>");
     }
-    $('.info-bubble').delay(4000)
+    $('.car .info-bubble').delay(3500)
     .queue(function (next) {
       $(this).css('opacity','0');
       next();
     });
   }
 
-
-
-  function collision($div1, $div2) {
+  /*Check if the car has passed the toll fee area*/
+  i = 0; //Set variable before function is run
+  function tollFeePass($div1, $div2) {
     $div1 = $('.car');
     $div2 = $('.toll-fee');
-    var x1 = $div1.offset().left;
-    var y1 = $div1.offset().top;
-    var h1 = $div1.outerHeight(true);
-    var w1 = $div1.outerWidth(true);
-    var b1 = y1 + h1;
-    var r1 = x1 + w1;
-    var x2 = $div2.offset().left;
-    var y2 = $div2.offset().top;
-    var h2 = $div2.outerHeight(true);
-    var w2 = $div2.outerWidth(true);
-    var b2 = y2 + h2;
-    var r2 = x2 + w2;
+    var x1 = $div1.offset().left; //Get the left position of the car
+    var w1 = $div1.outerWidth(true); //Get the outer width of the car
+    var r1 = x1 + w1; //Get the total left position + width of the car
+    var x2 = $div2.offset().left; //Get the left position of the toll fee mark
+    var w2 = $div2.outerWidth(true); //Get the outer width of the toll fee mark
+    var r2 = x2 + w2; //Get the total left postition + width of the toll fee mark
 
-    if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
-    return true;
+    /*If the total width + position of the is less than the left position of the
+    * toll fee mark OR if the left positioning of the car is larger than the total
+    * positioning of the toll fee mark*/
+    if (r1 < x2 || x1 > r2) {
+      i = 0; //Set i to 0 cause we want to run the function again
+      return false; //The car isn't passed the toll fee mark
+    } else { //The car is currently passing the toll fee mark
+       if ((i > 0)) { //If we've already ran this function once within the collision area
+         i++; //Add 1 more to see how many times the function has ran
+         return false; //Don't count the fee again
+       } else { //Otherwise if this function hasn't been run in the collision area before
+         i++; //Add 1 so that we know that the function has been run
+         return true; //Yaaay we can count the fee and display the info bubble
+       }
+     }
    }
 
   //Let's assign the fee
   var fee = 0; //It's always free to start driving!
   setInterval(function() { //Check if the car has passed the "toll fee mark" based on the cars position
-    if (collision(true)) {
+    if (tollFeePass(true)) {
       var nextFee = fee + timeFee; // Check what the next fee is going to be
       if (nextFee < 60) { //If the cars position is on the toll fee mark & the fee is less than 60
         fee += timeFee; //Add fee
