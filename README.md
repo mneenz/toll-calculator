@@ -31,9 +31,11 @@ Please use branches accordingly. For all new changes, branch off of `master` and
 
 ## File structure
 All the functionality is in `assets/js/toll-fee-calculator.js`. I've tried to add as many comments as possible to explain what I've built.
+
 All the styling is in `css/sass` & this is pretty straight forward. There are a few mixin's in `mixin.scss` but other than that it's pretty basic.
 
 ## I've taken help from these resources
 The car animation & background graphics are taken from: https://codepen.io/maheshambure21/pen/NPJvqq
+
 The scooter image is taken from: https://www.pngrepo.com/svg/20291/scooter
-Everything else I've built myself
+Everything else I've built myself.
