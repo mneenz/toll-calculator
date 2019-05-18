@@ -1,10 +1,10 @@
 // Toll fee calculator JS
 $(function() {
   var timeFee = 0; //Our fee based on time variable needs to be defined here in order for it to be used outside of the time function
+  var dt = new Date(); //Get the current date
 
   //This calculates the fees based on time of day
   function time() {
-    var dt = new Date(); //Get the current date
     var hour = dt.getHours(); //Get the current hour
     var minute = dt.getMinutes(); //Get current minutes
     var day = dt.getDay();
@@ -81,25 +81,26 @@ $(function() {
   }
 
 
-  //Let's assign the fee
-  var originalDateTime = new Date().getTime(); //Get the current date
+  //Hour checking
+  var originalDateTime = dt.getTime(); //Get the current time
 
   function checkHour() { //Check if 1 hour has pasts
-    var past = new Date(originalDateTime).getTime();
-    var oneHour = 1000 * 60 * 1;
-    if (new Date().getTime() - past < oneHour){
+    var past = new Date(originalDateTime).getTime(); //Get time and compare with original time
+    var oneHour = 1000 * 60 * 60;
+    if (new Date().getTime() - past < oneHour){ //Check if the current time minus the past time is smaller than one hour
       return false;
-    } else {
+    } else { //It's been one hour
       return true;
     }
   }
 
+  //Let's assign the fee
   var fee = 0; //It's always free to start driving!
    //We need this to check how many times the function && tollFeePass check has run has run
   setInterval(function() { //Check if the car has passed the "toll fee mark" based on the cars position
     if (tollFeePass(true)) {
       if (o == 0 || (o > 0 && checkHour(true))) { //If the function has never run before OR there has been an hour since it ran last time, add fee
-        if (o > 0 && checkHour(true)) {o = -1}; //Set this to -1 since we want to start over and there will be o++ added at the bottom.
+        if (o > 0 && (checkHour() == true)) {o = -1;} //Set this to -1 since we want to start over and there will be o++ added at the bottom.
         var nextFee = fee + timeFee; // Check what the next fee is going to be
         if (nextFee < 60) { //If the cars position is on the toll fee mark & the fee is less than 60
           fee += timeFee; //Add fee
@@ -108,7 +109,7 @@ $(function() {
           fee = 60; //60 is the highest fee
           showInfoBubble(); //Show the info bubble
         }
-      } else if (o > 0) && (checkHour() == false) {
+      } else if ((o > 0) && (checkHour() == false)) { //If the function has run before and there hasn't been an hour
         showInfoBubble();
 
       } o++; //Add 1 to tollFeePass check

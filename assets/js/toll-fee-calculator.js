@@ -100,7 +100,7 @@ $(function() {
   setInterval(function() { //Check if the car has passed the "toll fee mark" based on the cars position
     if (tollFeePass(true)) {
       if (o == 0 || (o > 0 && checkHour(true))) { //If the function has never run before OR there has been an hour since it ran last time, add fee
-        if (o > 0 && checkHour(true)) {o = -1}; //Set this to -1 since we want to start over and there will be o++ added at the bottom.
+        if (o > 0 && (checkHour() == true)) {o = -1;} //Set this to -1 since we want to start over and there will be o++ added at the bottom.
         var nextFee = fee + timeFee; // Check what the next fee is going to be
         if (nextFee < 60) { //If the cars position is on the toll fee mark & the fee is less than 60
           fee += timeFee; //Add fee
@@ -109,7 +109,7 @@ $(function() {
           fee = 60; //60 is the highest fee
           showInfoBubble(); //Show the info bubble
         }
-      } else if (o > 0) && (checkHour() == false) { //If the function has run before and there hasn't been an hour
+      } else if ((o > 0) && (checkHour() == false)) { //If the function has run before and there hasn't been an hour
         showInfoBubble();
 
       } o++; //Add 1 to tollFeePass check
